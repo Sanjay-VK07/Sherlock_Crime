@@ -2,10 +2,7 @@
   "command": "node server.js",
   "build_path": "./",
   "stack": "node18",
-  "env_variables": {
-    "X_ZOHO_CATALYST_LISTEN_PORT": "8080",
-    "PORT": "8080"
-  },
+  "env_variables": {},
   "memory": 256,
   "scripts": {}
 }
