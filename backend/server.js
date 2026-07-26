@@ -1,0 +1,58 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+import recordRoutes from './routes/records.js';
+import copilotRoutes from './routes/copilot.js';
+import workspaceRoutes from './routes/workspace.js';
+import evidenceRoutes from './routes/evidence.js';
+import mapRoutes from './routes/map.js';
+import chatRoutes from './routes/chat.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5001;
+
+// CORS setup
+app.use(cors({
+  origin: '*', // Allow all for demo purposes
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Body parser
+app.use(express.json());
+
+// Logger Middleware (Simple Audit Trail logging)
+app.use((req, res, next) => {
+  console.log(`[AUDIT LOG] ${new Date().toISOString()} - ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
+  next();
+});
+
+// Mount Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/records', recordRoutes);
+app.use('/api/copilot', copilotRoutes);
+app.use('/api/workspace', workspaceRoutes);
+app.use('/api/evidence', evidenceRoutes);
+app.use('/api/map', mapRoutes);
+app.use('/api/chat', chatRoutes);
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled Server Error:', err);
+  res.status(500).json({ error: 'Internal server error occurred' });
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`========================================`);
+  console.log(`   KSP SHERLOCK BACKEND ACTIVE ON PORT ${PORT} `);
+  console.log(`========================================`);
+});
