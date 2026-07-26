@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://sherlock-crime-backend.onrender.com/api/:path*"
+      "destination": "https://backend-pi-beige-27.vercel.app/api/:path*"
     }
   ]
 }
