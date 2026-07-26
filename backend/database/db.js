@@ -13,7 +13,8 @@ export async function getDb() {
   
   db = await open({
     filename: dbPath,
-    driver: sqlite3.Database
+    driver: sqlite3.Database,
+    mode: sqlite3.OPEN_READONLY
   });
   
   return db;
