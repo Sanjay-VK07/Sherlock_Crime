@@ -1,3 +1,5 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -12,6 +14,9 @@ import chatRoutes from './routes/chat.js';
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const PORT = process.env.PORT || 5001;
 
 // CORS setup
@@ -42,6 +47,17 @@ app.use('/api/chat', chatRoutes);
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// Wildcard route to send index.html for frontend SPA routing
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api")) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
 // Error handling middleware
